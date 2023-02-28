@@ -27,10 +27,26 @@ def run():
         response = stub.DeleteEmployee(EmployeeService_pb2.EmployeeID(id=201))
         print ('Deleted employee ' + response.status)
 
+        # Add a new employee
+        response = stub.CreateEmployee(EmployeeService_pb2.EmployeeData(id=301, name='Jose da Silva', title='Programmer'))
+        print ('Added new employee ' + response.status)
+
+        # Add a new employee
+        response = stub.CreateEmployee(EmployeeService_pb2.EmployeeData(id=401, name='Pedro de Oliveira', title='Enterpreneur'))
+        print ('Added new employee ' + response.status)
+
+        # Sort all employees
+        response = stub.SortEmployees(EmployeeService_pb2.EmptyMessage())
+        print ('Employees sorted' + str(response))
+
         # List all employees
         response = stub.ListAllEmployees(EmployeeService_pb2.EmptyMessage())
-        print ('All employees: ' + str(response))
+        
+        # Delete all employees
+        response = stub.DeleteAllEmployees(EmployeeService_pb2.EmptyMessage())
+        print ('All employees deleted ' + str(response))
 
 if __name__ == '__main__':
     logging.basicConfig()
     run()
+Type  :qa  and press <Enter> to exit Vim                                                                                                                                                    1,8           Top
