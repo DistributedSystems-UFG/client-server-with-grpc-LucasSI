@@ -30,7 +30,7 @@ class EmployeeServer(EmployeeService_pb2_grpc.EmployeeServiceServicer):
     return EmployeeService_pb2.StatusReply(status='OK')
 
   def GetEmployeeDataFromID(self, request, context):
-    usr = [ emp for emp in empDB if (emp['id'] == request.id) ] 
+    usr = [ emp for emp in empDB if (emp['id'] == request.id) ]
     return EmployeeService_pb2.EmployeeData(id=usr[0]['id'], name=usr[0]['name'], title=usr[0]['title'])
 
   def UpdateEmployeeTitle(self, request, context):
@@ -49,14 +49,26 @@ class EmployeeServer(EmployeeService_pb2_grpc.EmployeeServiceServicer):
   def ListAllEmployees(self, request, context):
     list = EmployeeService_pb2.EmployeeDataList()
     for item in empDB:
-      emp_data = EmployeeService_pb2.EmployeeData(id=item['id'], name=item['name'], title=item['title']) 
+      emp_data = EmployeeService_pb2.EmployeeData(id=item['id'], name=item['name'], title=item['title'])
       list.employee_data.append(emp_data)
     return list
+
+  def SortEmployees(self, request, context):
+    sorted(empDB, key = lambda i: i['id'])
+    list = EmployeeService_pb2.EmployeeDataList()
+    for item in empDB:
+       emp_data = EmployeeService_pb2.EmployeeData(id=item['id'], name=item['name'], title=item['title'])
+       list.employee_data.append(emp_data)
+    return list
+
+  def DeleteAllEmployees(self, request, context):
+    empDB.clear()
+    return EmployeeService_pb2.StatusReply(status='OK')
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     EmployeeService_pb2_grpc.add_EmployeeServiceServicer_to_server(EmployeeServer(), server)
-    server.add_insecure_port('[::]:50051')
+    server.add_insecure_port('[::]:5678')
     server.start()
     server.wait_for_termination()
 
@@ -64,3 +76,4 @@ def serve():
 if __name__ == '__main__':
     logging.basicConfig()
     serve()
+                                                                                                                                                                                            78,11         Bot                                                                                                                                                                                     1,12          Top
